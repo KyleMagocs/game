@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+
+# Copyright (c) Twisted Matrix Laboratories.
+# See LICENSE for details.
+from twisted.internet.protocol import ClientFactory
+from twisted.protocols.basic import LineReceiver
+from twisted.internet import reactor, defer
+from twisted.internet.task import LoopingCall
+from twisted.internet import stdio
+from twisted.protocols import basic
+import sys
+
+from twisted.internet import stdio
+from twisted.protocols import basic
+
+
+class EchoClient(basic.LineReceiver):
+	from os import linesep as delimiter
+	
+	end="Bye-bye!"
+	def connectionMade(self):
+		self.transport.write('>>> ')
+
+	def lineReceived(self, line):
+		#self.sendLine('EchoClient: ' + line)
+		self.transport.write('>>> ')
+		print line
+
+	def startChat(self):
+		pass
+		
+	def chat(self):
+		txt = raw_input('')
+		self.sendLine(txt)
+		
+			
+class EchoClientFactory(ClientFactory):
+    protocol = EchoClient
+
+    def clientConnectionFailed(self, connector, reason):
+        print 'connection failed:', reason.getErrorMessage()
+        reactor.stop()
+
+    def clientConnectionLost(self, connector, reason):
+        print 'connection lost:', reason.getErrorMessage()
+        reactor.stop()
+
+
+#def main():
+#	stdio.StandardIO(EchoClient())
+#	factory = EchoClientFactory()
+#	reactor.connectTCP('localhost', 8123, factory)
+#	reactor.run()
+#
+#if __name__ == '__main__':
+#	main()
+
