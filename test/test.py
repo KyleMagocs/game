@@ -1,5 +1,4 @@
 import sys, pygame
-pygame.init()
 from Client import * 
 from twisted.internet.task import LoopingCall
 import sys, pygame
